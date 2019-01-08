@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');    
 var {User} = require('./models/user');    
+var {Apple} = require('./models/apples');    
 
 var app = express();
 
@@ -18,6 +19,23 @@ app.post('/todos', (req, res) => {
     todo.save().then((success)=>{
         res.send(success);
     }, (err)=>{
+        res.status(400).send(err);
+    });
+    // var antonovka = new Apple({
+    //     color: 'Red',
+    //     weight: 0.3
+    // });
+    // antonovka.save().then((success) => {
+    //     console.log(success);
+    // });
+});
+
+app.get('/todos', (req, res) => {
+    Todo.find().then((success) => {
+        res.send({
+            todos: success
+        });
+    }, (err) => {
         res.status(400).send(err);
     });
 });
