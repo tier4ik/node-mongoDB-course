@@ -10,6 +10,11 @@ var {User} = require('./models/user');
 var {Apple} = require('./models/apples');    
 
 var app = express();
+// настройки порта в зависимости от расположения (на сервере или локально)
+// Для того чтобы сервер (например HEROCU) знал откуда начинать работу
+// пропишем в package.json в объекте script: "start": "node server/server.js"
+// также укажем в объекте "engines" версию нашего node "8.11.1"
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -62,8 +67,8 @@ app.get('/todos/:id', (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Connected to the port 3000');
+app.listen(port, () => {
+    console.log('Connected to the port ', port);
 });
 
 module.exports = {
