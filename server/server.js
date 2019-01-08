@@ -2,9 +2,9 @@ const express = require('express');
 // модуль с гитхаба, помогающий распарсить тело ПОСТ запроса
 const bodyParser = require('body-parser');
 
-var mongoose = require('./data_base/mongoose');
-var Todo = require('./models/todo').Todo;    
-var User = require('./models/user').User;    
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');    
+var {User} = require('./models/user');    
 
 var app = express();
 
@@ -25,3 +25,7 @@ app.post('/todos', (req, res) => {
 app.listen(3000, () => {
     console.log('Connected to the port 3000');
 });
+
+module.exports = {
+    app: app
+};
