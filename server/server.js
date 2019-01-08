@@ -48,13 +48,13 @@ app.get('/todos/:id', (req, res) => {
     if(!ObjectID.isValid(id)) {
         return res.status(404).send('<h1>Your ID is not valid</h1>');
     }else{
-        User.findById(id).then((user) => {
-            if(!user) {
+        Todo.findById(id).then((todo) => {
+            if(!todo) {
                 return res.status(404).send('<h1>User with this ID does not exist</h1>');
             }else{
-                res.send(`<h1>THIS IS OUR USER</h1>
-                        <div>${user}</div>
-                        <p>With the email: ${user.email}</p>`);
+                res.send({
+                    todo: todo
+                });
             }
         }).catch((e) => {
             console.log(e);
