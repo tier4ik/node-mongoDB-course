@@ -1,3 +1,4 @@
+require('./config/config');
 const express = require('express');
 const _ = require('lodash');
 // модуль с гитхаба, помогающий распарсить тело ПОСТ запроса
@@ -15,7 +16,7 @@ var app = express();
 // Для того чтобы сервер (например HEROCU) знал откуда начинать работу
 // пропишем в package.json в объекте script: "start": "node server/server.js"
 // также укажем в объекте "engines" версию нашего node "8.11.1"
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 app.use(bodyParser.json());
 
@@ -95,7 +96,7 @@ app.patch('/todos/:id', (req, res) => {
         }
         res.send({
             todo: todo
-        })
+        });
     }).catch((err) => {
         res.status(400).send();
     });
