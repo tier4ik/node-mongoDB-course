@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 // модуль с гитхаба, помогающий распарсить тело ПОСТ запроса
 const bodyParser = require('body-parser');
 const ObjectID = require('mongodb').ObjectID;
@@ -65,6 +66,39 @@ app.get('/todos/:id', (req, res) => {
             console.log(e);
         });
     }
+});
+
+// Для обновления файлов используется метод PATCH, использование методов различного
+// типа не принципиально, но является Best Practices в веб разработке
+app.patch('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['text', 'completed']);
+
+    if(!ObjectID.isValid(id)) {
+        return res.status(404).send('<h1>Your ID is not valid</h1>');
+    }
+
+    if(_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    }else{
+        body.completed = false;
+        body.completedAt = null;
+    }
+
+    Todo.findByIdAndUpdate(id, {
+        $set: body
+    }, {
+        new: true
+    }).then((todo) => {
+        if(!todo) {
+            return res.status(404).send();
+        }
+        res.send({
+            todo: todo
+        })
+    }).catch((err) => {
+        res.status(400).send();
+    });
 });
 
 app.listen(port, () => {
