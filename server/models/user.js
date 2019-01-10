@@ -46,9 +46,27 @@ UserSchema.method('generateAuthToken', function() {
         access: access,
         token: token
     }]);
-
     return this.save().then((success) => {
         return token;
+    });
+});
+
+//static применяется не к конкретному юзеру, а к модели !!!
+UserSchema.static('findByToken', function(token) {
+    var UserModel = this;
+    var decoded;
+
+    try {
+        decoded = jwt.verify(token, 'qwerty');
+    }catch(e){
+        return new Promise((resolve, reject) => {
+            reject();
+        });
+    }
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
     });
 });
 
